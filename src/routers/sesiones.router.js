@@ -1,40 +1,40 @@
-import {Router, json, urlencoded} from 'express'
+import {Router} from 'express'
 import passport from 'passport'
+import { soloLogueadosApi } from '../middlewares/auth.js'
 
 
-
-export const sesionesRouter= Router()
-
-
-sesionesRouter.use(json())
-sesionesRouter.use(urlencoded({extended: true}))
-
-
+export const sesionesRouter = Router()
 
 sesionesRouter.post('/login',
-  passport.authenticate('login', { failureRedirect: '/login' }),
+  passport.authenticate('login', {
+    failWithError: true
+  }),
   function (req, res) {
-    res.status(201).json({ status: 'success', message: 'Login successful' });
+    res.status(201).json({ status: 'success', payload: req.user })
+  },
+  function (error, req, res, next) {
+    res
+      .status(401)
+      .json({
+        status: 'error',
+        message: 'login failed'
+      })
   }
-);
+)
 
-
-
-sesionesRouter.get('/current', (req, res) => {
-  if (req.isAuthenticated()) {
+sesionesRouter.get('/current',
+  soloLogueadosApi,
+  function (req, res) {
     return res.json(req.user)
-  }
-  res.status(400).json({ status: 'error', message: 'no hay una sesion iniciada' })
-})
+  })
 
-
-
-sesionesRouter.post ('/logout', (req,res)=>{
-  req.logout(error=>{
-    if(error){
-      console.log(error)
+sesionesRouter.post('/logout', (req, res) => {
+  req.logout(err => {
+    if (err) {
       return res.status(500).json({ status: 'logout error', body: err })
-    }  
-  res.json({status:'success' , message:'logout OK!'})
+    }
+    res.json({ status: 'success', message: 'logout OK' })
   })
 })
+
+

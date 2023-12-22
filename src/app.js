@@ -3,7 +3,7 @@ import {PORT, MONGODB_CNX_STR} from './config.js'
 import {engine} from 'express-handlebars'
 import mongoose from 'mongoose'
 import {sesiones} from './middlewares/sesiones.js'
-import {autentication} from './middlewares/passport.js'
+import {autenticacion} from './middlewares/passport.js'
 import { apiRouter } from './routers/apirest.router.js'
 import { webRouter } from './routers/web.router.js'
 
@@ -12,11 +12,16 @@ console.log(`conectado ala Base de datos en:${MONGODB_CNX_STR}`)
 
 const app = express()
 
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
 
 app.engine('handlebars', engine())
 app.use('/static', express.static('./static'))
+
+
 app.use(sesiones)
-app.use(autentication)
+app.use(autenticacion)
 app.use('/api',apiRouter)
 app.use('/',webRouter)
 

@@ -4,7 +4,7 @@ fetch('http://localhost:8080/api/sesiones/current')
     console.log(data)
     document.getElementById('nombre').value= data.nombre
     document.getElementById('apellido').value= data.apellido
-    document.getElementById('email').value= data.email                
+    document.getElementById('email').value= data.email              
 })
 
 const buttonLogout = document.getElementById('logout')
@@ -36,5 +36,3 @@ buttonLogout?.addEventListener('click', async event => {
     console.log(err.message)
   }
 })
-
-

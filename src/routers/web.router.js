@@ -8,7 +8,7 @@ webRouter.get('/login', (req, res) => {
 })
 
 webRouter.get('/perfil', (req, res) => {
-    res.render('perfil.handlebars', { titulo: 'Perfil de usuario' })
+    res.render('perfil.handlebars', { titulo: 'Inicio de Sesión' })
 })
 
 webRouter.get('/register', (req, res) => {
@@ -16,7 +16,7 @@ webRouter.get('/register', (req, res) => {
 })
 
 webRouter.get('/resetpassword', (req, res) => {
-    res.render('resetpassword.handlebars', { titulo: 'Reseteo de contraseña' })
+    res.render('resetpassword.handlebars', { titulo: 'Reset Password' })
 })
 
 webRouter.get('/productos', (req, res) => {
