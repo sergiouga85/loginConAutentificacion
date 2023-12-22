@@ -1,9 +1,13 @@
 import {Router} from 'express'
 import passport from 'passport'
+
 import { soloLogueadosApi } from '../middlewares/auth.js'
 
 
 export const sesionesRouter = Router()
+
+
+
 
 sesionesRouter.post('/login',
   passport.authenticate('login', {
@@ -27,6 +31,22 @@ sesionesRouter.get('/current',
   function (req, res) {
     return res.json(req.user)
   })
+
+
+//github
+
+sesionesRouter.get('/githublogin',
+  passport.authenticate('github', { scope: ['user:email'] })
+)
+
+sesionesRouter.get('/githubcallback',
+  passport.authenticate('github', {
+    successRedirect: '/profile',
+    failureRedirect: '/login',
+  })
+)
+
+
 
 sesionesRouter.post('/logout', (req, res) => {
   req.logout(err => {

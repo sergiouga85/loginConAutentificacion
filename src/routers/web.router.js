@@ -3,6 +3,11 @@ import {Router, json, urlencoded} from 'express'
 
 export const webRouter= Router()
 
+
+webRouter.get('/', (req, res) => {
+    {return res.redirect('/login')}
+})
+
 webRouter.get('/login', (req, res) => {
     res.render('login.handlebars', { titulo: 'Inicio de Sesión' })
 })

@@ -14,6 +14,15 @@ const schema = new mongoose.Schema({
 }, {
   strict: 'throw',
   versionKey: false,
+  methods:{
+    infoPublica: function(){
+      return{
+        email: this.email,
+        nombre:this.nombre,
+        apellido: this.apellido
+      }
+    }
+  },
   statics: {
     registrar: async function (reqBody) {
       reqBody.password = hashear(reqBody.password)

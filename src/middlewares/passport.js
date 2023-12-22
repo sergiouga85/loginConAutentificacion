@@ -1,8 +1,45 @@
 import passport from 'passport'
-import { Strategy } from 'passport-local'
+import {Strategy as LocalStrategy} from 'passport-local'
+import { Strategy as GithubStrategy } from 'passport-github2'
 import { dbUsuarios } from '../models/User.js'
+import{githubCallbackUrl,githubClientSecret, githubClientId} from '../config.js'
 
-passport.use('register', new Strategy({
+
+passport.use('github', new GithubStrategy({
+  clientID: githubClientId,
+  clientSecret: githubClientSecret,
+  callbackURL: githubCallbackUrl
+}, async function verify(accessToken, refreshToken, profile, done) {
+  console.log(profile)
+
+  const usuario = await dbUsuarios.findOne({ email: profile.username })
+  if (usuario) {
+    return done(null, {
+      ...usuario.infoPublica(),
+      rol: 'usuario'
+    })
+  }
+
+  try {
+    const registrado = await dbUsuarios.create({
+      email: profile.username,
+      password: '(sin especificar)',
+      nombre: profile.displayName,
+      apellido: '(sin especificar)',
+    })
+    done(null, {
+      ...registrado.infoPublica(),
+      rol: 'usuario'
+    })
+  } catch (error) {
+    done(error)
+  }
+
+}))
+
+
+
+passport.use('register', new LocalStrategy({
   passReqToCallback: true,
   usernameField: 'email'
 },
@@ -15,7 +52,7 @@ passport.use('register', new Strategy({
     }
   }))
 
-passport.use('login', new Strategy({
+passport.use('login', new LocalStrategy({
   usernameField: 'email'
 }, async (email, password, done) => {
   try {
