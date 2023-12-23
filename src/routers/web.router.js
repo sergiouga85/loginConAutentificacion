@@ -1,11 +1,11 @@
 import {Router, json, urlencoded} from 'express'
-import {gitHubRouter} from './gitHub.router.js'
+import {logingitHubRouter} from './logingitHub.router.js'
 
 
 export const webRouter= Router()
 
 
-webRouter.use(gitHubRouter)
+webRouter.use(logingitHubRouter)
 
 
 webRouter.get('/', (req, res) => {
